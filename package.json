@@ -1,36 +1,30 @@
 {
   "name": "@karim-w/pester",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "React hooks and utilities for caching and performance",
   "author": "Karim",
   "license": "MIT",
-  "keywords": ["react", "hooks", "cache", "pester"],
-
-  "types": "./dist/index.d.ts",
-  "type": "module",
+  "keywords": [
+    "react",
+    "hooks",
+    "cache",
+    "pester"
+  ],
   "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
-    }
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Karim-W/pester.git"
   },
-
-  "files": ["dist"],
-
   "scripts": {
-    "dev": "tsup src/index.ts --watch --dts --format esm,cjs",
-    "build": "tsup src/index.ts --dts --format esm,cjs --clean",
+    "build": "rm -rf dist && node esbuild.js && tsc",
     "test": "vitest run"
   },
-
   "peerDependencies": {
     "react": ">=18"
   },
-
   "devDependencies": {
     "@testing-library/jest-dom": "^6.8.0",
     "@testing-library/react": "^16.3.0",
@@ -39,17 +33,19 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "^24.3.0",
     "@types/react": "^19.1.10",
+    "esbuild": "^0.25.9",
+    "esbuild-node-externals": "^1.18.0",
     "jsdom": "^26.1.0",
     "react": "^19.1.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.2",
     "vitest": "^3.2.4"
   },
-
   "sideEffects": false,
   "vitest": {
     "environment": "jsdom",
-    "setupFiles": ["./vitest.setup.ts"]
+    "setupFiles": [
+      "./vitest.setup.ts"
+    ]
   }
 }
-
