@@ -17,7 +17,7 @@ export function useCache<T>(
 	const [data, setData] = useState<T | undefined>(undefined);
 	const [error, setError] = useState<Error | null>(null);
 	const [isReady, setIsReady] = useState(false);
-	const [isLoading, setIsLoading] = useState(true);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		switch (options.dataStore) {
