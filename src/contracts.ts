@@ -24,3 +24,15 @@ export type UseCacheResult<T> = {
 	// refresh: () => void;
 }
 
+export type CacheDispatcherOptions<T> = {
+	ids: string[];
+	invalidate: string[];
+	action: () => Promise<T>;
+}
+
+export type CacheDispatcherResult<T> = {
+	data: T | undefined;
+	isLoading: boolean;
+	error: Error | null;
+}
+

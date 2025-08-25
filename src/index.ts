@@ -6,4 +6,6 @@
 //
 export { TryCatch, TryCatchSync } from './try_catch';
 export { useCache } from './use_cache';
+export { useCacheDispatcher } from './use_dispatcher';
+export { Client } from './client';
 export { DataStore, UseCacheOptions, UseCacheResult } from './contracts';

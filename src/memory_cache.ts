@@ -16,21 +16,64 @@ export class InMemoryCache implements Cachers {
 		this.cache = new Map();
 	}
 
-	set(key: string, value: any, validFor: number): void {
-		const expiry = Date.now() + validFor;
-		this.cache.set(key, { value, expiry });
+	notify(key: string, action: 'set' | 'update' | 'invalidate', value?: any): void {
 		const observers = this._observers.get(key);
-		if (observers) {
-			observers.forEach(callback => callback(value));
+		if (!observers) {
+			return;
 		}
+
+		observers.forEach(callback => {
+			if (typeof callback !== 'function') {
+				this._observers.get(key)?.delete(callback);
+				return;
+			}
+			callback({
+				action: action,
+				key: key,
+				value: value,
+
+			})
+		});
+	}
+
+
+
+
+	update(key: string, value: any): void {
+		const entry = this.cache.get(key);
+		if (!entry) {
+			return
+		}
+
+		entry.value = value;
+		this.cache.set(key, entry);
+
+		this.notify(key, 'update', value);
+	}
+
+	set(key: string, value: any, validFor: number = 5 * 60 * 1000): void {
+
+		const expiry = Date.now() + validFor;
+
+		this.cache.set(key, { value, expiry });
+
+		this.notify(key, 'set', value);
 	}
 
 	get<T>(key: string): T | undefined {
 		const entry = this.cache.get(key);
-		if (entry && entry.expiry > Date.now()) {
+		if (!entry) {
+			return undefined;
+		}
+
+		if (entry.expiry > Date.now()) {
 			return entry.value as T;
 		}
-		return undefined;
+
+		this.cache.delete(key); // Remove expired item
+		this.notify(key, 'invalidate');
+
+		return
 	}
 
 	observe(key: string, callback: Function): void {
@@ -39,6 +82,14 @@ export class InMemoryCache implements Cachers {
 		}
 		this._observers.get(key)?.add(callback);
 	}
+
+	invalidate(...keys: string[]): void {
+		keys.forEach(key => {
+			this.cache.delete(key);
+			this.notify(key, 'invalidate');
+		});
+	}
+
 }
 
 

@@ -7,6 +7,8 @@
 
 export interface Cachers {
 	set(key: string, value: any, validFor: number): void;
+	update(key: string, value: any): void;
 	get<T>(key: string): T | undefined;
 	observe(key: string, callback: (value: any) => void): void;
+	invalidate(...keys: string[]): void;
 }

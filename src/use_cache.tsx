@@ -33,6 +33,8 @@ export function useCache<T>(
 				break;
 		}
 
+		cacherRef.current.observe(id, dispatch_callback);
+
 		if (skipInitialFetch) {
 			return;
 		}
@@ -87,6 +89,26 @@ export function useCache<T>(
 
 		setData(result);
 		cacherRef.current.set(id, result, options.validFor || 1000 * 60 * 5);
+	}
+
+	const dispatch_callback = (action: 'set' | 'update' | 'invalidate', value?: any) => {
+		if (action === 'set' || action === 'update') {
+
+			if (value == data) {
+				return; // No change in data, do nothing
+			}
+
+			setData(value);
+			return;
+		}
+
+		setIsLoading(true);
+		setData(undefined);
+		setError(null);
+
+		fetch_contract().finally(() => {
+			setIsLoading(false);
+		});
 	}
 
 

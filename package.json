@@ -1,6 +1,6 @@
 {
   "name": "@karim-w/pester",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "React hooks and utilities for caching and performance",
   "author": "Karim",
   "license": "MIT",
